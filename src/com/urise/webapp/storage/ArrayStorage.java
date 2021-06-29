@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+    private Resume[] storage = new Resume[10_000];
     private int size = 0;
 
     public void clear() {
@@ -17,48 +17,44 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        int check = checkingForAvailability(r.getUuid());
-        if (check != -1) {
+        int index = findIndex(r.getUuid());
+        if (index != -1) {
             storage[size] = r;
-        }else{
-            System.out.println("Error! There is no such element");
+        } else {
+            System.out.println("Error! There is no such element " + r.getUuid());
         }
     }
 
     public void save(Resume r) {
-        if (size == 10000) {
-            System.out.println("Error! Unable to add a new resume!");
+        if (size >= storage.length) {
+            System.out.println("Error! Unable to add a new resume " + r.getUuid() + "! Array overflow!");
         } else {
-            if (size == 0) {
+            int index = findIndex(r.getUuid());
+            if (index == -1) {
                 storage[size] = r;
                 size++;
-            } else {
-                int check = checkingForAvailability(r.getUuid());
-                if (check == -1) {
-                    storage[size] = r;
-                    size++;
-                }
             }
         }
     }
 
     public Resume get(String uuid) {
-        int check = checkingForAvailability(uuid);
-        if (check != -1) {
-            return storage[check];
-        } else {
-            System.out.println("Error! There is no such element");
-            return null;
+        int index = findIndex(uuid);
+        if (index != -1) {
+            return storage[index];
         }
+        System.out.println("Error! There is no such element " + uuid);
+        return null;
+
     }
 
     public void delete(String uuid) {
-        int check = checkingForAvailability(uuid);
-        if (check != -1) {
-            System.arraycopy(storage, check + 1, storage, check, size - 1);
+        int index = findIndex(uuid);
+        if (index != -1) {
+            storage[index] = storage[size - 1];
+            storage[size - 1] = null;
             size--;
-        }else {
-            System.out.println("Error! There is no such element");
+        } else {
+            System.out.println("Error! There is no such element " + uuid);
         }
     }
 
@@ -73,12 +69,10 @@ public class ArrayStorage {
         return size;
     }
 
-    private int checkingForAvailability(String uuid) {
+    private int findIndex(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].toString().equals(uuid)) {
+            if (storage[i].getUuid().equals(uuid)) {
                 return i;
-            } else {
-                return -1;
             }
         }
         return -1;
