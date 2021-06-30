@@ -33,6 +33,8 @@ public class ArrayStorage {
             if (index == -1) {
                 storage[size] = r;
                 size++;
+            } else {
+                System.out.println("The resume is already in the repository");
             }
         }
     }
@@ -50,8 +52,7 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index != -1) {
-            storage[index] = storage[size - 1];
-            storage[size - 1] = null;
+            System.arraycopy(storage, index + 1, storage, index, size);
             size--;
         } else {
             System.out.println("Error! There is no such element " + uuid);
