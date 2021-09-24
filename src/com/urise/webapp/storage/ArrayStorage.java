@@ -19,11 +19,7 @@ public class ArrayStorage {
     public void update(Resume r) {
         int index = findIndex(r.getUuid());
         if (index != -1) {
-            if (size >= storage.length) {
-                System.out.println("Error! Index outside the array");
-            } else {
-                storage[size] = r;
-            }
+            storage[index] = r;
         } else {
             System.out.println("Error! There is no such element " + r.getUuid());
         }
@@ -56,12 +52,8 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index != -1) {
-            if (size >= storage.length) {
-                System.out.println("Error! Index outside the array");
-            } else {
-                System.arraycopy(storage, index - 1, storage, index, size);
-                size--;
-            }
+            System.arraycopy(storage, index + 1, storage, index, size - 1);
+            size--;
         } else {
             System.out.println("Error! There is no such element " + uuid);
         }
