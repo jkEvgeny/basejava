@@ -8,7 +8,7 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private Resume[] storage = new Resume[10_000];
+    private Resume[] storage = new Resume[3];
     private int size = 0;
 
     public void clear() {
@@ -19,7 +19,11 @@ public class ArrayStorage {
     public void update(Resume r) {
         int index = findIndex(r.getUuid());
         if (index != -1) {
-            storage[size] = r;
+            if (size >= storage.length) {
+                System.out.println("Error! Index outside the array");
+            } else {
+                storage[size] = r;
+            }
         } else {
             System.out.println("Error! There is no such element " + r.getUuid());
         }
@@ -34,7 +38,7 @@ public class ArrayStorage {
                 storage[size] = r;
                 size++;
             } else {
-                System.out.println("The resume is already in the repository");
+                System.out.println("The resume is already in the repository :" + r.getUuid());
             }
         }
     }
@@ -52,8 +56,12 @@ public class ArrayStorage {
     public void delete(String uuid) {
         int index = findIndex(uuid);
         if (index != -1) {
-            System.arraycopy(storage, index - 1, storage, index, size);
-            size--;
+            if (size >= storage.length) {
+                System.out.println("Error! Index outside the array");
+            } else {
+                System.arraycopy(storage, index - 1, storage, index, size);
+                size--;
+            }
         } else {
             System.out.println("Error! There is no such element " + uuid);
         }
